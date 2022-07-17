@@ -74,16 +74,15 @@ async def _get_zone_list(self) -> list | None:
                 zone_list.append(data[JSON_FEATURES][x][JSON_PROPERTIES][JSON_ID])
                 x += 1
             _LOGGER.debug("Zones list: %s", zone_list)
-            zone_list = ",".join(str(x) for x in zone_list) # convert list to str
             return zone_list
     return None
 
 
 @config_entries.HANDLERS.register(DOMAIN)
-class NWSAlertsFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
+class NWSAlertsArrayFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     """Config flow for NWS Alerts."""
 
-    VERSION = 2
+    VERSION = 1
     CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
 
     def __init__(self):
@@ -130,10 +129,10 @@ class NWSAlertsFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
-        return NWSAlertsOptionsFlow(config_entry)
+        return NWSAlertsArrayOptionsFlow(config_entry)
 
 
-class NWSAlertsOptionsFlow(config_entries.OptionsFlow):
+class NWSAlertsArrayOptionsFlow(config_entries.OptionsFlow):
     """Options flow for NWS Alerts."""
 
     def __init__(self, config_entry):

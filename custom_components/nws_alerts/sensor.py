@@ -67,15 +67,15 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     hass.data[DOMAIN][config.entry_id] = {
         COORDINATOR: coordinator,
     }
-    async_add_entities([NWSAlertSensor(hass, config)], True)
+    async_add_entities([NWSAlertArraySensor(hass, config)], True)
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
     """Setup the sensor platform."""
-    async_add_entities([NWSAlertSensor(hass, entry)], True)
+    async_add_entities([NWSAlertArraySensor(hass, entry)], True)
 
 
-class NWSAlertSensor(CoordinatorEntity):
+class NWSAlertArraySensor(CoordinatorEntity):
     """Representation of a Sensor."""
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
@@ -85,15 +85,22 @@ class NWSAlertSensor(CoordinatorEntity):
         self._name = entry.data[CONF_NAME]
         self._icon = DEFAULT_ICON
         self._state = 0
-        self._event = None
-        self._event_id = None
+        self._alerts_url = None
+        self._title = None
+        self._alert_url = None
+        self._id = None
         self._message_type = None
-        self._event_status = None
-        self._event_severity = None
-        self._display_desc = None
-        self._spoken_desc = None
+        self._status = None
+        self._severity = None
+        self._certainty = None
+        self._headline = None
+        self._description = None
+        self._spoken = None
+        self._instruction = None
+        self._expires = None
         self._zone_id = entry.data[CONF_ZONE_ID].replace(" ", "")
         self.coordinator = hass.data[DOMAIN][entry.entry_id][COORDINATOR]
+        _LOGGER.debug("Raw Coordinator Data: %s" % (self.coordinator.data))
 
     @property
     def unique_id(self):
@@ -124,21 +131,29 @@ class NWSAlertSensor(CoordinatorEntity):
 
     @property
     def extra_state_attributes(self):
+        _LOGGER.debug("Extra State Attributes Raw Data: %s" % (self.coordinator.data))
         """Return the state message."""
         attrs = {}
 
-        if self.coordinator.data is None:
+        if self.coordinator.data is None or not self.coordinator.data:
+            _LOGGER.debug("Self Coordinator Data is blank")
             return attrs
 
         attrs[ATTR_ATTRIBUTION] = ATTRIBUTION
-        attrs["title"] = self.coordinator.data["event"]
-        attrs["event_id"] = self.coordinator.data["event_id"]
+        attrs["title"] = self.coordinator.data["title"]
+        attrs["alerts_url"] = self.coordinator.data["alerts_url"]
+        attrs["alert_url"] = self.coordinator.data["alert_url"]
+        attrs["id"] = self.coordinator.data["id"]
         attrs["message_type"] = self.coordinator.data["message_type"]
-        attrs["event_status"] = self.coordinator.data["event_status"]
-        attrs["event_severity"] = self.coordinator.data["event_severity"]
-        attrs["display_desc"] = self.coordinator.data["display_desc"]
-        attrs["spoken_desc"] = self.coordinator.data["spoken_desc"]
-
+        attrs["status"] = self.coordinator.data["status"]
+        attrs["severity"] = self.coordinator.data["severity"]
+        attrs["certainty"] = self.coordinator.data["certainty"]
+        attrs["headline"] = self.coordinator.data["headline"]
+        attrs["description"] = self.coordinator.data["description"]
+        attrs["spoken"] = self.coordinator.data["spoken"]
+        attrs["instruction"] = self.coordinator.data["instruction"]
+        attrs["expires"] = self.coordinator.data["expires"]
+        _LOGGER.debug("Raw Attrs Data: %s" % (attrs))
         return attrs
 
     @property

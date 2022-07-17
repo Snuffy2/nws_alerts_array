@@ -119,7 +119,7 @@ class AlertsDataUpdateCoordinator(DataUpdateCoordinator):
         self.config = config
         self.hass = hass
 
-        _LOGGER.debug("Data will be update every %s", self.interval)
+        _LOGGER.debug("Data will be updated every %s", self.interval)
 
         super().__init__(hass, _LOGGER, name=self.name, update_interval=self.interval)
 
@@ -155,18 +155,24 @@ async def async_get_state(config) -> dict:
             _LOGGER.debug("getting state for %s from %s" % (zone_id, url))
             if r.status == 200:
                 data = await r.json()
-
+    #_LOGGER.debug("Raw State Data: %s" % (data))
     if data is not None:
         # Reset values before reassigning
         values = {
             "state": 0,
-            "event": None,
-            "event_id": None,
+            "alerts_url": None,
+            "title": None,
+            "alert_url": None,
+            "id": None,
             "message_type": None,
-            "event_status": None,
-            "event_severity": None,
-            "display_desc": None,
-            "spoken_desc": None,
+            "status": None,
+            "severity": None,
+            "certainty": None,
+            "description": None,
+            "spoken": None,
+            "headline": None,
+            "instruction": None,
+            "expires": None,
         }
         if "zones" in data:
             for zone in zone_id.split(","):
@@ -189,104 +195,92 @@ async def async_get_alerts(zone_id: str) -> dict:
             _LOGGER.debug("getting alert for %s from %s" % (zone_id, url))
             if r.status == 200:
                 data = await r.json()
-
+    _LOGGER.debug("Raw Alert Data: %s" % (data))
     if data is not None:
-        events = []
-        headlines = []
-        event_id = ""
-        message_type = ""
-        event_status = ""
-        event_severity = ""
-        display_desc = ""
-        spoken_desc = ""
+        title = []
+        headline = []
+        alert_url = []
+        id = []
+        message_type = []
+        status = []
+        severity = []
+        certainty = []
+        description = []
+        spoken = []
+        instruction = []
+        expires = []
         features = data["features"]
         for alert in features:
-            event = alert["properties"]["event"]
-            if "NWSheadline" in alert["properties"]["parameters"]:
-                headline = alert["properties"]["parameters"]["NWSheadline"][0]
+            if "parameters" in alert["properties"] and "NWSheadline" in alert["properties"]["parameters"] and alert["properties"]["parameters"]["NWSheadline"][0] is not None:
+                spoken.append(alert["properties"]["parameters"]["NWSheadline"][0].replace("\n\n","<00temp00>").replace("\n"," ").replace("<00temp00>","\n\n").title())
             else:
-                headline = event
+                spoken.append(None)
+            _LOGGER.debug("spoken appended")
+            headline.append(alert["properties"]["headline"])
+            _LOGGER.debug("headline appended")
+            expires.append(alert["properties"]["expires"])
+            _LOGGER.debug("expires appended")
+            title.append(alert["properties"]["event"])
+            _LOGGER.debug("title appended")
+            if "description" in alert["properties"] and alert["properties"]["description"] is not None:
+                description.append(alert["properties"]["description"].replace("\n\n","<00temp00>").replace("\n"," ").replace("<00temp00>","\n\n"))
+            else:
+                description.append(None)
+            _LOGGER.debug("description appended")
+            alert_url.append(alert["id"])
+            _LOGGER.debug("alert_url appended")
+            id.append(alert["properties"]["id"])
+            _LOGGER.debug("id appended")
+            message_type.append(alert["properties"]["messageType"])
+            _LOGGER.debug("message_type appended")
+            status.append(alert['properties']['status'])
+            _LOGGER.debug("status appended")
+            severity.append(alert["properties"]["severity"])
+            _LOGGER.debug("severity appended")
+            certainty.append(alert["properties"]["certainty"])
+            _LOGGER.debug("certainty appended")
+            if "instruction" in alert["properties"] and alert["properties"]["instruction"] is not None:
+                instruction.append(alert["properties"]["instruction"].replace("\n\n","<00temp00>").replace("\n"," ").replace("<00temp00>","\n\n"))
+            else:
+                instruction.append(None)
+            _LOGGER.debug("instruction appended")
+        if len(title) > 0:
+        #    event_str = []
+        #    for item in events:
+        #        #if event_str != "":
+        #        #    event_str += " - "
+        #        event_str.append(item)
 
-            id = alert["id"]
-            type = alert["properties"]["messageType"]
-            status = alert['properties']['status']
-            description = alert["properties"]["description"]
-            instruction = alert["properties"]["instruction"]
-            severity = alert["properties"]["severity"]
-            certainty = alert["properties"]["certainty"]
-
-            # if event in events:
-            #    continue
-
-            events.append(event)
-            headlines.append(headline)
-
-            if display_desc != "":
-                display_desc += "\n\n-\n\n"
-
-            display_desc += (
-                "\n>\nHeadline: %s\nStatus: %s\nMessage Type: %s\nSeverity: %s\nCertainty: %s\nDescription: %s\nInstruction: %s"
-                % (headline, status, type, severity, certainty, description, instruction)
-            )
-
-            if event_id != "":
-                event_id += "-"
-
-            event_id += id
-            
-            if message_type != "":
-                   message_type += ' - '
-
-            message_type += type
-            
-            if event_status != "":
-                   event_status += ' - '
-
-            event_status += status
-            
-            if event_severity != "":
-                   event_severity += ' - '
-
-            event_severity += severity
-
-        if headlines:
-            num_headlines = len(headlines)
-            i = 0
-            for headline in headlines:
-                i += 1
-                if spoken_desc != "":
-                    if i == num_headlines:
-                        spoken_desc += "\n\n-\n\n"
-                    else:
-                        spoken_desc += "\n\n-\n\n"
-
-                spoken_desc += headline
-
-        if len(events) > 0:
-            event_str = ""
-            for item in events:
-                if event_str != "":
-                    event_str += " - "
-                event_str += item
-
-            values["state"] = len(events)
-            values["event"] = event_str
-            values["event_id"] = event_id
+            values["state"] = len(title)
+            values["alerts_url"] = url
+            values["title"] = title
+            values["alert_url"] = alert_url
+            values["id"] = id
             values["message_type"] = message_type
-            values["event_status"] = event_status
-            values["event_severity"] = event_severity
-            values["display_desc"] = display_desc
-            values["spoken_desc"] = spoken_desc
+            values["status"] = status
+            values["severity"] = severity
+            values["certainty"] = certainty
+            values["headline"] = headline
+            values["description"] = description
+            values["spoken"] = spoken
+            values["instruction"] = instruction
+            values["expires"] = expires
         else:
             values = {
                 "state": 0,
-                "event": None,
-                "event_id": None,
+                "alerts_url": url,
+                "title": None,
+                "alert_url": None,
+                "id": None,
                 "message_type": None,
-                "event_status": None,
-                "event_severity": None,
-                "display_desc": None,
-                "spoken_desc": None,
+                "status": None,
+                "severity": None,
+                "certainty": None,
+                "headline": None,
+                "description": None,
+                "spoken": None,
+                "instruction": None,
+                "expires": None,
             }
-
+    _LOGGER.debug("Values: %s" % (values))
     return values
