@@ -155,7 +155,7 @@ async def async_get_state(config) -> dict:
             _LOGGER.debug("getting state for %s from %s" % (zone_id, url))
             if r.status == 200:
                 data = await r.json()
-    #_LOGGER.debug("Raw State Data: %s" % (data))
+    # _LOGGER.debug("Raw State Data: %s" % (data))
     if data is not None:
         # Reset values before reassigning
         values = {
@@ -211,8 +211,18 @@ async def async_get_alerts(zone_id: str) -> dict:
         expires = []
         features = data["features"]
         for alert in features:
-            if "parameters" in alert["properties"] and "NWSheadline" in alert["properties"]["parameters"] and alert["properties"]["parameters"]["NWSheadline"][0] is not None:
-                spoken.append(alert["properties"]["parameters"]["NWSheadline"][0].replace("\n\n","<00temp00>").replace("\n"," ").replace("<00temp00>","\n\n").title())
+            if (
+                "parameters" in alert["properties"]
+                and "NWSheadline" in alert["properties"]["parameters"]
+                and alert["properties"]["parameters"]["NWSheadline"][0] is not None
+            ):
+                spoken.append(
+                    alert["properties"]["parameters"]["NWSheadline"][0]
+                    .replace("\n\n", "<00temp00>")
+                    .replace("\n", " ")
+                    .replace("<00temp00>", "\n\n")
+                    .title()
+                )
             else:
                 spoken.append(None)
             _LOGGER.debug("spoken appended")
@@ -222,8 +232,16 @@ async def async_get_alerts(zone_id: str) -> dict:
             _LOGGER.debug("expires appended")
             title.append(alert["properties"]["event"])
             _LOGGER.debug("title appended")
-            if "description" in alert["properties"] and alert["properties"]["description"] is not None:
-                description.append(alert["properties"]["description"].replace("\n\n","<00temp00>").replace("\n"," ").replace("<00temp00>","\n\n"))
+            if (
+                "description" in alert["properties"]
+                and alert["properties"]["description"] is not None
+            ):
+                description.append(
+                    alert["properties"]["description"]
+                    .replace("\n\n", "<00temp00>")
+                    .replace("\n", " ")
+                    .replace("<00temp00>", "\n\n")
+                )
             else:
                 description.append(None)
             _LOGGER.debug("description appended")
@@ -233,23 +251,31 @@ async def async_get_alerts(zone_id: str) -> dict:
             _LOGGER.debug("id appended")
             message_type.append(alert["properties"]["messageType"])
             _LOGGER.debug("message_type appended")
-            status.append(alert['properties']['status'])
+            status.append(alert["properties"]["status"])
             _LOGGER.debug("status appended")
             severity.append(alert["properties"]["severity"])
             _LOGGER.debug("severity appended")
             certainty.append(alert["properties"]["certainty"])
             _LOGGER.debug("certainty appended")
-            if "instruction" in alert["properties"] and alert["properties"]["instruction"] is not None:
-                instruction.append(alert["properties"]["instruction"].replace("\n\n","<00temp00>").replace("\n"," ").replace("<00temp00>","\n\n"))
+            if (
+                "instruction" in alert["properties"]
+                and alert["properties"]["instruction"] is not None
+            ):
+                instruction.append(
+                    alert["properties"]["instruction"]
+                    .replace("\n\n", "<00temp00>")
+                    .replace("\n", " ")
+                    .replace("<00temp00>", "\n\n")
+                )
             else:
                 instruction.append(None)
             _LOGGER.debug("instruction appended")
         if len(title) > 0:
-        #    event_str = []
-        #    for item in events:
-        #        #if event_str != "":
-        #        #    event_str += " - "
-        #        event_str.append(item)
+            #    event_str = []
+            #    for item in events:
+            #        #if event_str != "":
+            #        #    event_str += " - "
+            #        event_str.append(item)
 
             values["state"] = len(title)
             values["alerts_url"] = url
