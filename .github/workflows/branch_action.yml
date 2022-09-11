@@ -1,4 +1,4 @@
-name: Draft PR for New Branches
+name: After New Branch - Draft PR
 on:
   workflow_dispatch:
   create:
