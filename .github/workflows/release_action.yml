@@ -18,6 +18,7 @@ jobs:
       - name: Empty Commit
         run: git commit --allow-empty -m "Empty commit"
       - name: Git Pull in case dev already exists
+        continue-on-error: true
         run: git pull --no-ff --no-rebase --allow-unrelated-histories --set-upstream origin dev
       - name: Push Commit
         run: git push --set-upstream origin dev
