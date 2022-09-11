@@ -1,5 +1,4 @@
 import logging
-import uuid
 
 import voluptuous as vol
 from homeassistant.components.sensor import PLATFORM_SCHEMA
