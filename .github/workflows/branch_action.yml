@@ -27,3 +27,4 @@ jobs:
         run: gh pr create -d --head -B dev -b "${GITHUB_REF##*/}" -t "${GITHUB_REF##*/}"
         env:
           GITHUB_TOKEN: ${{ secrets.CPR }}
+          GH_TOKEN: ${{ secrets.CPR }}
