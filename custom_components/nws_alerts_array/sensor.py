@@ -1,28 +1,26 @@
 import logging
-import uuid
 
 import voluptuous as vol
 from homeassistant.components.sensor import PLATFORM_SCHEMA
-from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
-from homeassistant.const import ATTR_ATTRIBUTION, CONF_NAME
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import ATTR_ATTRIBUTION
+from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
-from . import AlertsDataUpdateCoordinator
 
-from .const import (
-    ATTRIBUTION,
-    CONF_INTERVAL,
-    CONF_TIMEOUT,
-    CONF_ZONE_ID,
-    COORDINATOR,
-    DEFAULT_ICON,
-    DEFAULT_INTERVAL,
-    DEFAULT_NAME,
-    DEFAULT_TIMEOUT,
-    DOMAIN,
-)
+from . import AlertsDataUpdateCoordinator
+from .const import ATTRIBUTION
+from .const import CONF_INTERVAL
+from .const import CONF_TIMEOUT
+from .const import CONF_ZONE_ID
+from .const import COORDINATOR
+from .const import DEFAULT_ICON
+from .const import DEFAULT_INTERVAL
+from .const import DEFAULT_NAME
+from .const import DEFAULT_TIMEOUT
+from .const import DOMAIN
 
 # ---------------------------------------------------------
 # API Documentation

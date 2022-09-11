@@ -4,30 +4,26 @@ from datetime import timedelta
 
 import aiohttp
 from async_timeout import timeout
-from homeassistant import config_entries
-from homeassistant.const import CONF_NAME
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_registry import (
-    async_entries_for_config_entry,
-    async_get,
-)
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers.entity_registry import async_entries_for_config_entry
+from homeassistant.helpers.entity_registry import async_get
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.helpers.update_coordinator import UpdateFailed
 
-from .const import (
-    API_ENDPOINT,
-    CONF_INTERVAL,
-    CONF_TIMEOUT,
-    CONF_ZONE_ID,
-    COORDINATOR,
-    DEFAULT_INTERVAL,
-    DEFAULT_TIMEOUT,
-    DOMAIN,
-    ISSUE_URL,
-    PLATFORMS,
-    USER_AGENT,
-    VERSION,
-)
+from .const import API_ENDPOINT
+from .const import CONF_INTERVAL
+from .const import CONF_TIMEOUT
+from .const import CONF_ZONE_ID
+from .const import COORDINATOR
+from .const import DEFAULT_INTERVAL
+from .const import DEFAULT_TIMEOUT
+from .const import DOMAIN
+from .const import ISSUE_URL
+from .const import PLATFORMS
+from .const import USER_AGENT
+from .const import VERSION
 
 _LOGGER = logging.getLogger(__name__)
 

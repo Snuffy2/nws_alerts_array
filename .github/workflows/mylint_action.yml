@@ -21,6 +21,7 @@ jobs:
         with:
           configuration: --force-single-line --profile black
       - name: Check code with flake8
+        continue-on-error: true
         uses: reviewdog/action-flake8@v3
         id: action_flake8
         with:
