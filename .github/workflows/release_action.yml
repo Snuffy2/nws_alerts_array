@@ -1,4 +1,4 @@
-name: After Release: Create New Dev Branch and PR
+name: After Release - Create New Dev Branch and PR
 on:
   workflow_dispatch:
   release:
