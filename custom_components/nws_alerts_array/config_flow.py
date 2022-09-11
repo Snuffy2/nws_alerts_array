@@ -11,17 +11,15 @@ from homeassistant.const import CONF_NAME
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 
-from .const import (
-    API_ENDPOINT,
-    CONF_INTERVAL,
-    CONF_TIMEOUT,
-    CONF_ZONE_ID,
-    DEFAULT_INTERVAL,
-    DEFAULT_NAME,
-    DEFAULT_TIMEOUT,
-    DOMAIN,
-    USER_AGENT,
-)
+from .const import API_ENDPOINT
+from .const import CONF_INTERVAL
+from .const import CONF_TIMEOUT
+from .const import CONF_ZONE_ID
+from .const import DEFAULT_INTERVAL
+from .const import DEFAULT_NAME
+from .const import DEFAULT_TIMEOUT
+from .const import DOMAIN
+from .const import USER_AGENT
 
 JSON_FEATURES = "features"
 JSON_PROPERTIES = "properties"
