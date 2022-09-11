@@ -1,4 +1,4 @@
-name: Create Branch on Assigning Bug Issue
+name: Assigning Bug Issue - Create Branch
 on:
   issues:
     types: [ assigned ]
