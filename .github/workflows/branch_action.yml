@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v3.0.2
       - name: Show Branch Name
         run: echo Branch ${GITHUB_REF##*/}
-      - name: Create and Checkout New Dev branch
+      - name: Checkout Newly Created Branch
         run: git checkout ${GITHUB_REF##*/}
       - name: Initialize mandatory git config
         run: |
@@ -24,7 +24,7 @@ jobs:
       #- run: echo "commit_count="$(git rev-list --count origin..HEAD)
       #- run: echo "commit_count="$(git rev-list --count origin..HEAD) >> $GITHUB_ENV
       - name: Create Pull Request
-        run: gh pr create -d -B dev -b "${GITHUB_REF##*/}" -t "${GITHUB_REF##*/}" --head
+        run: gh pr create -d -B dev -b "${GITHUB_REF##*/}" -t "${GITHUB_REF##*/}" --head "${GITHUB_REF##*/}"
         env:
           GITHUB_TOKEN: ${{ secrets.CPR }}
           GH_TOKEN: ${{ secrets.CPR }}
