@@ -3,7 +3,6 @@ import uuid
 
 import voluptuous as vol
 from homeassistant.components.sensor import PLATFORM_SCHEMA
-from homeassistant.config_entries import SOURCE_IMPORT
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_ATTRIBUTION
 from homeassistant.const import CONF_NAME
