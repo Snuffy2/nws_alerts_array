@@ -8,14 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.0.2
+      - name: Git Pull in case dev already exists
+        run: git pull --commit --no-rebase --allow-unrelated-histories     
       - name: Create and Checkout New Dev branch
         run: git checkout -b dev
       - name: Initialize mandatory git config
         run: |
           git config user.name "GitHub Actions"
           git config user.email noreply@github.com
-      - name: Git Pull in case dev already exists
-        run: git pull --commit --no-rebase --allow-unrelated-histories --set-upstream origin dev
       - name: Empty Commit
         run: git commit --allow-empty -m "Empty commit"
       - name: Push Commit
