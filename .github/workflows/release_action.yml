@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3.0.2
       - name: Git Pull in case dev already exists
-        run: git pull --commit --no-rebase --allow-unrelated-histories     
+        run: git pull --no-ff --no-rebase --allow-unrelated-histories     
       - name: Create and Checkout New Dev branch
         run: git checkout -b dev
       - name: Initialize mandatory git config
