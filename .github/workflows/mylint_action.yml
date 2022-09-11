@@ -24,7 +24,7 @@ jobs:
         uses: reviewdog/action-flake8@v3
         id: action_flake8
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.CPR }}
           fail_on_error: false
           filter_mode: "nofilter"
           flake8_args: "--select=F,E7,E9,W1,W6"
